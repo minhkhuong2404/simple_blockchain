@@ -22,6 +22,7 @@ class Blockchain(object):
         self.difficulty = 2
         self.pending_transactions = []
         self.chain = []
+        self.add_genesis_block()
 
     def print(self):
         for chain in self.chain:
@@ -37,9 +38,9 @@ class Blockchain(object):
 
     def add_genesis_block(self):
         self.chain.append(
-            Block(0, 100, [], time.time(), previous_hash="My first block"))
+            Block(0, 100, [], time.time(), previous_hash="0"))
 
-    def new_block(self, proof):
+    def add_block(self, proof):
         block = Block(
             len(self.chain),
             proof,
@@ -54,7 +55,7 @@ class Blockchain(object):
     def get_previous_hash(self):
         return self.chain[len(self.chain) - 1].hash
 
-    def new_transaction(self, sender, recipient, amount):
+    def add_transaction(self, sender, recipient, amount):
         transaction = {
             'sender': sender,
             'recipient': recipient,
@@ -64,19 +65,18 @@ class Blockchain(object):
 
 
 blockchain = Blockchain()
-blockchain.add_genesis_block()
 
-blockchain.new_transaction("Satoshi", "Mike", '5 BTC')
-blockchain.new_transaction("Mike", "Satoshi", '1 BTC')
-blockchain.new_transaction("Satoshi", "Hal Finney", '5 BTC')
-blockchain.new_block(12345)
+blockchain.add_transaction("Satoshi", "Mike", '5 BTC')
+blockchain.add_transaction("Mike", "Satoshi", '1 BTC')
+blockchain.add_transaction("Satoshi", "Hal Finney", '5 BTC')
+blockchain.add_block(12345)
 
-blockchain.new_transaction("Mike", "Alice", '1 BTC')
-blockchain.new_transaction("Alice", "Bob", '0.5 BTC')
-blockchain.new_transaction("Bob", "Mike", '0.5 BTC')
-blockchain.new_block(6789)
+blockchain.add_transaction("Mike", "Alice", '1 BTC')
+blockchain.add_transaction("Alice", "Bob", '0.5 BTC')
+blockchain.add_transaction("Bob", "Mike", '0.5 BTC')
+blockchain.add_block(6789)
 
-blockchain.new_block(12350)
+blockchain.add_block(12350)
 
 print("My blockchain: ")
 blockchain.print()

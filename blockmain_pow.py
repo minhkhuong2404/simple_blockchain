@@ -113,14 +113,14 @@ class Blockchain(object):
     def get_last_block(self):
         return self.chain[-1]
 
-    def new_transaction(self, transaction):
+    def add_transaction(self, transaction):
         if not transaction.from_address or not transaction.to_address:
             return False
         if not transaction.is_valid() and not float(transaction.amount) < 0:
             return False
         self.pending_transactions.append(transaction)
 
-    def mine(self):
+    def add_block(self):
         if not self.pending_transactions:
             return False
 
@@ -158,42 +158,42 @@ class Blockchain(object):
 
             block.hash, previous_hash = block_hash, block_hash
 
-        return result
+        print(result)
 
 
 blockchain = Blockchain()
 
 t1 = Transaction("Satoshi", "Mike", '5')
 t1.sign_transaction()
-blockchain.new_transaction(t1)
+blockchain.add_transaction(t1)
 t2 = Transaction("Mike", "Satoshi", '1')
 t2.sign_transaction()
-blockchain.new_transaction(t2)
+blockchain.add_transaction(t2)
 t3 = Transaction("Satoshi", "Hal Finney", '5')
 t3.sign_transaction()
-blockchain.new_transaction(t3)
-blockchain.mine()
+blockchain.add_transaction(t3)
+blockchain.add_block()
 
 t4 = Transaction("Mike", "Alice", '1')
 t4.sign_transaction()
-blockchain.new_transaction(t4)
+blockchain.add_transaction(t4)
 t5 = Transaction("Alice", "Bob", '0.5')
 t5.sign_transaction()
-blockchain.new_transaction(t5)
-blockchain.mine()
+blockchain.add_transaction(t5)
+blockchain.add_block()
 
 t6 = Transaction("Vine", "Mark", '0.01')
 t6.sign_transaction()
-blockchain.new_transaction(t6)
-blockchain.mine()
+blockchain.add_transaction(t6)
+blockchain.add_block()
 
 print("My blockchain: ")
 blockchain.print()
 print("Blockchain's validity :")
-print(blockchain.check_chain_validity())
+blockchain.check_chain_validity()
 
 blockchain.chain[1].transactions[0] = Transaction("A", "B", "100")
 blockchain.print()
 
 print("Blockchain's validity :")
-print(blockchain.check_chain_validity())
+blockchain.check_chain_validity()
