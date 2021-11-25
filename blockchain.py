@@ -40,10 +40,10 @@ class Blockchain(object):
         self.chain.append(
             Block(0, 100, [], time.time(), previous_hash="0"))
 
-    def add_block(self, proof):
+    def add_block(self, nonce):
         block = Block(
             len(self.chain),
-            proof,
+            nonce,
             self.pending_transactions,
             time.time(),
             self.get_previous_hash()
