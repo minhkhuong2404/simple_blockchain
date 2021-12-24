@@ -1,5 +1,5 @@
 import json
-import time
+from time import time, ctime
 from hashlib import sha256
 
 
@@ -8,7 +8,7 @@ class Transaction:
         self.from_address = from_address
         self.to_address = to_address
         self.amount = amount
-        self.time = time.time()
+        self.time = ctime(time())
         self.signature = ''
 
     def print(self):
@@ -16,7 +16,8 @@ class Transaction:
                                                                self.to_address, self.amount, self.time)
 
     def compute_hash(self):
-        block_string = json.dumps(self.from_address + self.to_address + str(self.amount) + str(self.time), sort_keys=True)
+        block_string = json.dumps(
+            self.from_address + self.to_address + str(self.amount) + str(self.time), sort_keys=True)
         return sha256(block_string.encode()).hexdigest()
 
     def sign_transaction(self):
@@ -141,7 +142,7 @@ class Blockchain(object):
         add_new_block = Block(
             last_block.index + 1,
             self.pending_transactions,
-            time.time(),
+            ctime(time()),
             last_block.block_hash
         )
 
@@ -188,7 +189,8 @@ class Blockchain(object):
                     break
                 if previous_hash != chain_block.previous_hash:
                     print(previous_hash)
-                    print("Previous hash is not the same, expect: " + str(chain_block.previous_hash))
+                    print("Previous hash is not the same, expect: " +
+                          str(chain_block.previous_hash))
                     result = False
                     break
                 if type(chain_block.transactions) == str:
@@ -269,7 +271,8 @@ blockchain.check_chain_validity(generated_blockchain.chain)
 # time to hack this blockchain 😈
 target_transactions = generated_blockchain.chain[1].transactions.split('\t')[1]
 generated_blockchain.chain[1].transactions = \
-    generated_blockchain.chain[1].transactions.replace(target_transactions, Transaction("A", "B", "100").print())
+    generated_blockchain.chain[1].transactions.replace(
+        target_transactions, Transaction("A", "B", "100").print())
 # generated_blockchain.chain[1].hash = "0000huj"
 # generated_blockchain.chain[1].nonce = 12345
 

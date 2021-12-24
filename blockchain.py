@@ -1,5 +1,5 @@
 import json
-import time
+from time import time, ctime
 from hashlib import sha256
 
 
@@ -19,7 +19,6 @@ class Block:
 
 class Blockchain(object):
     def __init__(self):
-        self.difficulty = 2
         self.pending_transactions = []
         self.chain = []
         self.add_genesis_block()
@@ -38,14 +37,14 @@ class Blockchain(object):
 
     def add_genesis_block(self):
         self.chain.append(
-            Block(0, 100, [], time.time(), previous_hash="0"))
+            Block(0, 100, [], ctime(time()), previous_hash="0"))
 
     def add_block(self, nonce):
         block = Block(
             len(self.chain),
             nonce,
             self.pending_transactions,
-            time.time(),
+            ctime(time()),
             self.get_previous_hash()
         )
         self.pending_transactions = []
